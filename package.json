@@ -1,0 +1,54 @@
+{
+  "name": "aportaciones-blog",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "format": "prettier --write .",
+    "test": "vitest --run",
+    "test:ui": "vitest",
+    "e2e": "playwright test",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "{app,lib,schemas}/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@portabletext/react": "^5.0.0",
+    "@sanity/image-url": "^1.2.0",
+    "groq": "^4.13.0",
+    "next": "16.0.1",
+    "next-sanity": "^11.6.5",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "rss": "^1.2.2",
+    "sanity": "^4.13.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "commitlint": "^20.1.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "playwright": "^1.56.1",
+    "prettier": "^3.6.2",
+    "typescript": "^5",
+    "vitest": "^4.0.7"
+  }
+}
