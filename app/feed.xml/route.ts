@@ -1,6 +1,6 @@
 import {NextResponse} from 'next/server'
 import RSS from 'rss'
-import {client} from '../lib/sanity.client'
+import {client} from '../../lib/sanity.client'
 export async function GET(){
   const items:any[] = await client.fetch(`*[_type=='aportacion']|order(publishedAt desc)[0...50]{title,"slug":slug.current,excerpt,publishedAt}`)
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
