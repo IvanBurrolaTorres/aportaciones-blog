@@ -17,14 +17,12 @@
     "next-sanity": "^11.6.8",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "rss": "^1.2.2",
     "sanity": "^4.16.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/rss": "^0.0.32",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "typescript": "^5"
