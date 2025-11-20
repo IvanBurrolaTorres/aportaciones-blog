@@ -6,8 +6,8 @@ import {listQuery, PAGE_SIZE} from '../lib/queries'
 
 export const revalidate = 300
 
-type SP = Record<string, string | string[]> | URLSearchParams
-function getPage(sp: SP | undefined): number {
+type SP = Record<string, string | string[]> | URLSearchParams | undefined
+function getPage(sp: SP): number {
   if (!sp) return 1
   if (typeof (sp as any).get === 'function') {
     const v = (sp as URLSearchParams).get('page') || '1'
@@ -20,10 +20,11 @@ function getPage(sp: SP | undefined): number {
   return Number.isFinite(n) && n > 0 ? n : 1
 }
 
-export default async function Home(props: { searchParams: Promise<SP> | SP }) {
-  const sp = typeof (props.searchParams as any)?.then === 'function'
-    ? await (props.searchParams as Promise<SP>)
-    : (props.searchParams as SP)
+export default async function Home(props: { searchParams?: Promise<SP> | SP }) {
+  const maybePromise = props?.searchParams as any
+  const sp: SP = maybePromise && typeof maybePromise.then === 'function'
+    ? await maybePromise
+    : props.searchParams as SP
 
   const page = getPage(sp)
   const from = (page - 1) * PAGE_SIZE
