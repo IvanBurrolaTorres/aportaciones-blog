@@ -46,10 +46,10 @@ export default async function Home(props: { searchParams?: Promise<SP> | SP }) {
         <div className="container mx-auto px-4 md:px-6 text-center">
           <div className="mx-auto max-w-3xl space-y-6">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-neutral-900 dark:text-white animate-fade-in">
-              Explora. Aprende. Construye.
+              MI CAMINO.
             </h1>
             <p className="text-lg md:text-xl text-neutral-600 dark:text-neutral-400 leading-relaxed">
-              Un espacio dedicado a compartir conocimientos, tutoriales y experiencias sobre desarrollo de software y diseño moderno.
+              Iván Burrola Torres A01562825.
             </p>
           </div>
         </div>
