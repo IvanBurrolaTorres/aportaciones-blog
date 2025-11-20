@@ -1,3 +1,8 @@
 import imageUrlBuilder from '@sanity/image-url'
-import {client} from './sanity.client'
-export const urlFor = (src:any) => imageUrlBuilder(client).image(src)
+import { client } from './sanity.client'
+
+const builder = imageUrlBuilder(client)
+
+export const urlFor = (src: any) => {
+  return builder.image(src).auto('format').fit('max')
+}

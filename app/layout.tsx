@@ -1,20 +1,21 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Geist } from 'next/font/google'
 import { Shell } from '../components/Shell'
 import { ThemeProvider } from '../components/ThemeProvider'
 import './globals.css'
+import { cn } from '../lib/utils'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: {
     default: 'Aportaciones Blog',
     template: '%s | Aportaciones',
   },
-  description: 'Blog de aportaciones con Next.js 16 y Sanity v3.',
-  icons: {
-    icon: '/favicon.ico',
-  },
+  description: 'Blog de aportaciones con Next.js y Sanity.',
 }
 
 export default function RootLayout({
@@ -23,8 +24,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" suppressHydrationWarning className="scroll-smooth">
-      <body className={inter.variable}>
+    <html lang="es" suppressHydrationWarning>
+      <body className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        geistSans.variable
+      )}>
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="system"
