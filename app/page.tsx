@@ -7,6 +7,7 @@ import {listQuery, PAGE_SIZE} from '../lib/queries'
 export const revalidate = 300
 
 type SP = Record<string, string | string[]> | URLSearchParams | undefined
+
 function getPage(sp: SP): number {
   if (!sp) return 1
   if (typeof (sp as any).get === 'function') {
@@ -21,10 +22,11 @@ function getPage(sp: SP): number {
 }
 
 export default async function Home(props: { searchParams?: Promise<SP> | SP }) {
+  // Next 16 puede entregar `searchParams` como Promise:
   const maybePromise = props?.searchParams as any
   const sp: SP = maybePromise && typeof maybePromise.then === 'function'
     ? await maybePromise
-    : props.searchParams as SP
+    : (props.searchParams as SP)
 
   const page = getPage(sp)
   const from = (page - 1) * PAGE_SIZE
