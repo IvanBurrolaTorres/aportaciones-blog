@@ -15,7 +15,13 @@ export async function GET() {
   const query = `*[_type=="aportacion"] | order(publishedAt desc) [0...20] {
     title, "slug": slug.current, excerpt, publishedAt
   }`
-  const items: any[] = await client.fetch(query)
+  let items: any[] = []
+  try {
+    items = await client.fetch(query)
+  } catch (e) {
+    console.warn("Failed to fetch posts for feed", e)
+    items = []
+  }
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://aportaciones-blog.vercel.app'
 
   const xmlItems = items.map(it => `

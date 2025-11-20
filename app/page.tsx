@@ -1,10 +1,11 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import {client} from '../lib/sanity.client'
-import {urlFor} from '../lib/image'
-import {listQuery, PAGE_SIZE} from '../lib/queries'
-
 export const revalidate = 300
+
+import Link from "next/link"
+import { client } from "../lib/sanity.client"
+import { listQuery, PAGE_SIZE } from "../lib/queries"
+import { PostCard } from "../components/PostCard"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { cn } from "../lib/utils"
 
 type SP = Record<string, string | string[]> | URLSearchParams | undefined
 
@@ -22,7 +23,6 @@ function getPage(sp: SP): number {
 }
 
 export default async function Home(props: { searchParams?: Promise<SP> | SP }) {
-  // Next 16 puede entregar `searchParams` como Promise:
   const maybePromise = props?.searchParams as any
   const sp: SP = maybePromise && typeof maybePromise.then === 'function'
     ? await maybePromise
@@ -35,35 +35,62 @@ export default async function Home(props: { searchParams?: Promise<SP> | SP }) {
   let posts: any[] = []
   try {
     posts = await client.fetch(listQuery, { from, to })
-  } catch {
+  } catch (e) {
+    console.error(e)
     posts = []
   }
 
+  const hasMore = posts.length >= PAGE_SIZE // Basic check, ideal would be to count total
+
   return (
-    <main style={{maxWidth:960, margin:'32px auto', padding:'0 16px'}}>
-      <h1 style={{fontSize:28, fontWeight:700, margin:'0 0 16px'}}>Aportaciones</h1>
-      {posts.length === 0 && (
-        <p style={{opacity:.8}}>Aún no hay aportaciones publicadas.</p>
+    <div className="container py-10">
+      <section className="mb-12 text-center">
+        <h1 className="mb-4 text-4xl font-extrabold tracking-tight lg:text-5xl">
+          Aportaciones
+        </h1>
+        <p className="text-lg text-muted max-w-2xl mx-auto">
+          Explora nuestros últimos artículos, tutoriales y noticias sobre desarrollo y diseño.
+        </p>
+      </section>
+
+      {posts.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-muted">Aún no hay aportaciones publicadas.</p>
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post: any) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </div>
       )}
-      <ul style={{display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:16, listStyle:'none', padding:0, margin:0}}>
-        {posts.map((p:any) => (
-          <li key={p.slug}>
-            <Link href={`/aportacion/${p.slug}`} style={{textDecoration:'none', color:'inherit', display:'block'}}>
-              <h2 style={{fontSize:18, margin:'0 0 8px'}}>{p.title}</h2>
-              {p.coverImage && (
-                <Image
-                  src={urlFor(p.coverImage).width(1200).height(800).url()}
-                  alt={p.title}
-                  width={1200}
-                  height={800}
-                  style={{width:'100%',height:'auto',borderRadius:6}}
-                />
-              )}
-              <p style={{marginTop:8,opacity:.8}}>{p.excerpt ?? ''}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </main>
+
+      <div className="mt-12 flex justify-center gap-4">
+        {page > 1 && (
+          <Link
+            href={`/?page=${page - 1}`}
+            className={cn(
+              "flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-white"
+            )}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Anterior
+          </Link>
+        )}
+        {/* We don't know total count easily without another query, but we can show Next if we got full page */}
+        {/* For now assuming if we got PAGE_SIZE items there might be more */}
+        {posts.length >= PAGE_SIZE && (
+           <Link
+           href={`/?page=${page + 1}`}
+           className={cn(
+             "flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-white"
+           )}
+         >
+           Siguiente
+           <ChevronRight className="h-4 w-4" />
+         </Link>
+        )}
+      </div>
+    </div>
   )
 }
