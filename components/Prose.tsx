@@ -1,5 +1,5 @@
-import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Image from "next/image";
+import { PortableText, PortableTextComponents } from "@portabletext/react";
 import { urlFor } from "../lib/image";
 
 const components: PortableTextComponents = {
@@ -8,6 +8,7 @@ const components: PortableTextComponents = {
       if (!value?.asset?._ref) {
         return null;
       }
+
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-card">
@@ -90,11 +91,16 @@ const components: PortableTextComponents = {
   },
 };
 
-export function Prose({ value }: { value: any }) {
-  // OJO: padding lateral solo en móvil → evita que el texto toque el borde
+type ProseProps = {
+  // lo relajamos para que TS no truene en build
+  value: unknown;
+};
+
+export function Prose({ value }: ProseProps) {
   return (
-    <div className="prose mx-auto max-w-[65ch] px-4 sm:px-0 dark:prose-invert">
-      <PortableText value={value} components={components} />
+    <div className="prose prose-lg dark:prose-invert mx-auto max-w-[65ch] px-4 md:px-0">
+      {/* forzamos el tipo para PortableText */}
+      <PortableText value={value as any} components={components} />
     </div>
   );
 }
