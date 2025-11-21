@@ -2,9 +2,11 @@ import { PortableText, PortableTextComponents } from "@portabletext/react";
 import { urlFor } from "../lib/image";
 import Image from "next/image";
 
+type PortableValue = Array<Record<string, unknown>>;
+
 const components: PortableTextComponents = {
   types: {
-    image: ({ value }: any) => {
+    image: ({ value }: { value: Record<string, any> }) => {
       if (!value?.asset?._ref) {
         return null;
       }
@@ -76,7 +78,7 @@ const components: PortableTextComponents = {
         <a
           href={value.href}
           rel={rel}
-          className="break-words font-medium text-accent underline underline-offset-4 hover:text-accent/80"
+          className="font-medium text-accent underline underline-offset-4 hover:text-accent/80"
         >
           {children}
         </a>
@@ -90,9 +92,9 @@ const components: PortableTextComponents = {
   },
 };
 
-export function Prose({ value }: { value: any }) {
+export function Prose({ value }: { value: PortableValue }) {
   return (
-    <div className="prose mx-auto max-w-[65ch] break-words px-4 sm:px-0 dark:prose-invert">
+    <div className="prose mx-auto max-w-[65ch] px-4 sm:px-0 dark:prose-invert">
       <PortableText value={value} components={components} />
     </div>
   );
