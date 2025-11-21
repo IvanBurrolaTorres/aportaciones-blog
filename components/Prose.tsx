@@ -1,13 +1,12 @@
 import { PortableText, PortableTextComponents } from "@portabletext/react";
-import { urlFor } from "../lib/image";
 import Image from "next/image";
+import { urlFor } from "../lib/image";
 
 const components: PortableTextComponents = {
   types: {
     image: ({ value }: any) => {
-      if (!value?.asset?._ref) {
-        return null;
-      }
+      if (!value?.asset?._ref) return null;
+
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-card">
@@ -19,7 +18,7 @@ const components: PortableTextComponents = {
             />
           </div>
           {value.caption && (
-            <figcaption className="mt-2 text-center text-sm text-neutral-600 dark:text-neutral-300">
+            <figcaption className="mt-2 text-center text-sm text-muted">
               {value.caption}
             </figcaption>
           )}
@@ -49,26 +48,20 @@ const components: PortableTextComponents = {
       </h4>
     ),
     normal: ({ children }) => (
-      <p className="leading-relaxed [&:not(:first-child)]:mt-6">
-        {children}
-      </p>
+      <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="mt-6 border-l-2 border-accent pl-6 italic">
+      <blockquote className="mt-6 border-l-2 border-accent pl-6 italic text-muted">
         {children}
       </blockquote>
     ),
   },
   list: {
     bullet: ({ children }) => (
-      <ul className="my-6 ml-6 list-disc [&>li]:mt-2">
-        {children}
-      </ul>
+      <ul className="my-6 ml-6 list-disc [&>li]:mt-2">{children}</ul>
     ),
     number: ({ children }) => (
-      <ol className="my-6 ml-6 list-decimal [&>li]:mt-2">
-        {children}
-      </ol>
+      <ol className="my-6 ml-6 list-decimal [&>li]:mt-2">{children}</ol>
     ),
   },
   listItem: {
@@ -89,7 +82,7 @@ const components: PortableTextComponents = {
       );
     },
     code: ({ children }) => (
-      <code className="relative rounded bg-card px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+      <code className="relative rounded bg-card px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-text">
         {children}
       </code>
     ),
@@ -98,8 +91,8 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: any }) {
   return (
-    <div className="prose prose-lg dark:prose-invert mx-auto w-full max-w-[65ch] px-4 sm:px-0">
-      <PortableText value={value as any} components={components} />
+    <div className="mx-auto w-full max-w-[65ch] px-4 sm:px-0 text-base leading-relaxed text-neutral-900 dark:text-neutral-50">
+      <PortableText value={value} components={components} />
     </div>
   );
 }
