@@ -2,6 +2,12 @@ import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Image from "next/image";
 import { urlFor } from "../lib/image";
 
+// CONFIGURACIÓN DE ESTILOS:
+// Definimos una constante para el color del texto.
+// 'text-neutral-900': Negro casi puro para modo claro (Soluciona lo deslavado/opaco).
+// 'dark:text-neutral-50': Blanco brillante para modo oscuro.
+const TEXT_COLOR = "text-neutral-900 dark:text-neutral-50";
+
 const components: PortableTextComponents = {
   types: {
     image: ({ value }: any) => {
@@ -26,30 +32,33 @@ const components: PortableTextComponents = {
     },
   },
   block: {
-    // Quitamos los estilos manuales de aquí para limpiar el código.
-    // Los controlaremos todos desde el contenedor padre (ver abajo).
+    // INYECCIÓN DIRECTA DE CLASES:
+    // En lugar de esperar que el padre herede el color, se lo ponemos explícitamente a cada etiqueta.
     h1: ({ children }) => (
-      <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl mt-10 mb-6">
+      <h1 className={`mt-10 mb-6 text-3xl font-extrabold tracking-tight lg:text-4xl ${TEXT_COLOR}`}>
         {children}
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="scroll-m-20 border-b border-border pb-2 text-2xl font-semibold tracking-tight first:mt-0 mt-10 mb-4">
+      <h2 className={`mt-10 mb-4 border-b border-border pb-2 text-2xl font-semibold tracking-tight first:mt-0 ${TEXT_COLOR}`}>
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="scroll-m-20 text-xl font-semibold tracking-tight mt-8 mb-4">
+      <h3 className={`mt-8 mb-4 text-xl font-semibold tracking-tight ${TEXT_COLOR}`}>
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="scroll-m-20 text-lg font-semibold tracking-tight mt-6 mb-3">
+      <h4 className={`mt-6 mb-3 text-lg font-semibold tracking-tight ${TEXT_COLOR}`}>
         {children}
       </h4>
     ),
     normal: ({ children }) => (
-      <p className="leading-7 [&:not(:first-child)]:mt-6">
+      // AQUÍ ESTABA EL PROBLEMA DE "DESLAVADO":
+      // Al poner TEXT_COLOR directo aquí, forzamos el negro intenso.
+      // Agregamos 'leading-7' para buena lectura y 'mb-4' para separación.
+      <p className={`leading-7 [&:not(:first-child)]:mt-6 ${TEXT_COLOR}`}>
         {children}
       </p>
     ),
@@ -60,11 +69,12 @@ const components: PortableTextComponents = {
     ),
   },
   list: {
+    // Listas también forzadas con el color
     bullet: ({ children }) => (
-      <ul className="my-6 ml-6 list-disc [&>li]:mt-2">{children}</ul>
+      <ul className={`my-6 ml-6 list-disc [&>li]:mt-2 ${TEXT_COLOR}`}>{children}</ul>
     ),
     number: ({ children }) => (
-      <ol className="my-6 ml-6 list-decimal [&>li]:mt-2">{children}</ol>
+      <ol className={`my-6 ml-6 list-decimal [&>li]:mt-2 ${TEXT_COLOR}`}>{children}</ol>
     ),
   },
   listItem: {
@@ -94,19 +104,14 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: any }) {
   return (
-    <div className="mx-auto w-full max-w-none px-0
-      prose prose-lg dark:prose-invert
-      
-      {/* AQUÍ ESTÁ LA SOLUCIÓN: FORZAMOS EL COLOR DIRECTAMENTE */}
-      {/* Esto anula el gris por defecto de tailwind/typography */}
-      prose-p:text-black dark:prose-p:text-white
-      prose-headings:text-black dark:prose-headings:text-white
-      prose-li:text-black dark:prose-li:text-white
-      prose-strong:text-black dark:prose-strong:text-white
-      
-      {/* Aseguramos peso de fuente para legibilidad en móvil */}
-      prose-p:font-normal md:prose-p:font-normal
-    ">
+    // CAMBIO IMPORTANTE EN EL CONTENEDOR:
+    // 1. Quitamos 'mx-auto' y 'px' porque eso ya lo maneja el padre (page.tsx).
+    // 2. Mantenemos 'w-full'.
+    // 3. IMPORTANTE: Quitamos la clase 'prose' de aquí. 
+    //    ¿Por qué? Porque la clase 'prose' es la que inyecta los colores grises opacos por defecto.
+    //    Como ya estilizamos cada <h1> y <p> manualmente arriba, ya no necesitamos 'prose' para el color,
+    //    solo necesitamos que renderice el contenido.
+    <div className="w-full max-w-none">
       <PortableText value={value} components={components} />
     </div>
   );
