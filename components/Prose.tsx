@@ -11,8 +11,8 @@ const components: PortableTextComponents = {
         return null;
       }
       return (
-        <figure className="my-8">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-card">
+        <figure className="my-8 w-full">
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-card">
             <Image
               src={urlFor(value).width(1200).fit("max").auto("format").url()}
               alt={value.alt || "Imagen del artículo"}
@@ -94,12 +94,11 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: PortableValue }) {
   return (
-    // CORRECCIÓN CRÍTICA: 
-    // 1. 'w-full' fuerza a usar todo el ancho disponible.
-    // 2. 'mx-auto' activa el centrado.
-    // 3. 'px-4' asegura margen en móviles. 
-    // 4. SE ELIMINÓ 'sm:px-0' que era lo que rompía el margen en celulares grandes/tablets.
-    <div className="prose mx-auto w-full max-w-[65ch] px-4 dark:prose-invert">
+    // CAMBIO IMPORTANTE:
+    // Quitamos 'mx-auto', 'px' y 'max-w'.
+    // Agregamos 'w-full' y 'max-w-none'.
+    // Esto obliga al texto a ocupar el 100% del contenedor padre en page.tsx.
+    <div className="prose prose-lg dark:prose-invert w-full max-w-none">
       <PortableText value={value} components={components} />
     </div>
   );
