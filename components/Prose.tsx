@@ -76,7 +76,7 @@ const components: PortableTextComponents = {
         <a
           href={value.href}
           rel={rel}
-          className="font-medium text-accent underline underline-offset-4 hover:text-accent/80"
+          className="break-words font-medium text-accent underline underline-offset-4 hover:text-accent/80"
         >
           {children}
         </a>
@@ -92,14 +92,7 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: any }) {
   return (
-    <div
-      className="
-        prose prose-neutral
-        prose-p:text-text prose-li:text-text prose-strong:text-text
-        mx-auto max-w-[65ch]
-        dark:prose-invert
-      "
-    >
+    <div className="prose mx-auto max-w-[65ch] break-words px-4 sm:px-0 dark:prose-invert">
       <PortableText value={value} components={components} />
     </div>
   );
