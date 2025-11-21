@@ -1,14 +1,13 @@
 import { PortableText, PortableTextComponents } from "@portabletext/react";
-import { urlFor } from "../lib/image";
 import Image from "next/image";
+import { urlFor } from "../lib/image";
 import { cn } from "../lib/utils";
 
 const components: PortableTextComponents = {
   types: {
     image: ({ value }: any) => {
-      if (!value?.asset?._ref) {
-        return null;
-      }
+      if (!value?.asset?._ref) return null;
+
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-card">
@@ -30,30 +29,32 @@ const components: PortableTextComponents = {
   },
   block: {
     h1: ({ children }) => (
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mt-10 mb-6">
+      <h1 className="mt-10 mb-6 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         {children}
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="scroll-m-20 border-b border-border pb-2 text-3xl font-semibold tracking-tight first:mt-0 mt-10 mb-4">
+      <h2 className="mt-10 mb-4 scroll-m-20 border-b border-border pb-2 text-3xl font-semibold tracking-tight first:mt-0">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mt-8 mb-4">
+      <h3 className="mt-8 mb-4 scroll-m-20 text-2xl font-semibold tracking-tight">
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight mt-6 mb-3">
+      <h4 className="mt-6 mb-3 scroll-m-20 text-xl font-semibold tracking-tight">
         {children}
       </h4>
     ),
     normal: ({ children }) => (
-      <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>
+      <p className="leading-relaxed text-foreground [&:not(:first-child)]:mt-6">
+        {children}
+      </p>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="mt-6 border-l-2 border-accent pl-6 italic text-muted">
+      <blockquote className="mt-6 border-l-2 border-accent pl-6 italic text-foreground">
         {children}
       </blockquote>
     ),
@@ -93,7 +94,7 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: any }) {
   return (
-    <div className="prose prose-neutral dark:prose-invert mx-auto max-w-3xl px-4 md:px-6 leading-relaxed">
+    <div className="prose mx-auto max-w-[65ch] text-foreground dark:prose-invert">
       <PortableText value={value} components={components} />
     </div>
   );
