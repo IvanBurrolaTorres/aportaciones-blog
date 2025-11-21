@@ -3,49 +3,41 @@
 @tailwind utilities;
 
 @layer base {
-  /* Forzar colores sólidos en lugar de variables para Safari iOS */
   :root {
-    --background: 255 255 255; /* Blanco */
-    --foreground: 23 23 23; /* Casi negro */
+    /* CAMBIO CRÍTICO: Usar valores RGB sin comas ni 'rgb()' para que Tailwind pueda manipular la opacidad */
+    --background: 255 255 255; 
+    --foreground: 23 23 23; /* #171717 convertido a RGB */
     
-    /* Variables adicionales en formato RGB para Tailwind */
-    --text: 17 24 39; /* gray-900 */
-    --muted: 107 114 128; /* gray-500 */
-    --border: 229 231 235; /* gray-200 */
+    /* Variables para bordes y textos secundarios */
+    --muted: 107 114 128;
+    --border: 229 231 235;
   }
 
   [data-theme="dark"] {
-    --background: 10 10 10; /* Negro oscuro */
-    --foreground: 237 237 237; /* Casi blanco */
+    --background: 10 10 10; 
+    --foreground: 237 237 237; /* #ededed convertido a RGB */
     
-    --text: 243 244 246; /* gray-100 */
-    --muted: 156 163 175; /* gray-400 */
-    --border: 55 65 81; /* gray-700 */
+    --muted: 156 163 175;
+    --border: 55 65 81;
   }
 
-  /* Aplicar colores base al body */
   body {
+    /* Sintaxis correcta para usar variables RGB */
     background-color: rgb(var(--background));
     color: rgb(var(--foreground));
     font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
     
-    /* CRÍTICO: Forzar opacidad completa en Safari iOS */
+    /* Optimización de renderizado de fuentes para iPhone */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
-  /* Asegurar que todos los elementos de texto tengan opacidad 1 */
-  p, h1, h2, h3, h4, h5, h6, span, div, li, a {
-    opacity: 1 !important;
-  }
 }
 
-/* Blur placeholder utility */
+/* Utilidad para carga de imágenes */
 .blur-load {
   filter: blur(20px);
   transition: filter 0.5s ease-out;
 }
-
 .blur-load.loaded {
   filter: blur(0);
 }
