@@ -96,13 +96,16 @@ export function Prose({ value }: { value: any }) {
   return (
     <div
       className="
-        prose prose-lg dark:prose-invert
-        mx-auto max-w-[65ch]
-        px-4 sm:px-0
+        prose prose-lg mx-auto max-w-[65ch] px-4 sm:px-0
         prose-headings:text-neutral-900
         prose-p:text-neutral-900
         prose-li:text-neutral-900
         prose-strong:text-neutral-900
+        dark:prose-invert
+        dark:prose-headings:text-neutral-50
+        dark:prose-p:text-neutral-100
+        dark:prose-li:text-neutral-100
+        dark:prose-strong:text-neutral-50
       "
     >
       <PortableText value={value as any} components={components} />
