@@ -85,18 +85,24 @@ export default async function AportacionPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Contenedor del artículo con padding lateral en móvil */}
-      <article className="w-full py-10 md:py-16">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6">
-          <Link
-            href="/"
-            className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-accent transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Volver al inicio
-          </Link>
+      {/* CORRECCIÓN: Estructura simplificada para garantizar centrado */}
+      <article className="min-h-screen w-full py-10 md:py-16">
+        {/* Contenedor principal centrado */}
+        <div className="container mx-auto w-full px-4">
+          
+          {/* Botón Volver */}
+          <div className="mx-auto max-w-[65ch]">
+            <Link
+              href="/"
+              className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-accent transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Volver al inicio
+            </Link>
+          </div>
 
-          <header className="mb-10 text-center">
+          {/* Header del Artículo */}
+          <header className="mx-auto mb-10 max-w-3xl text-center">
             <div className="mb-4 flex items-center justify-center gap-4 text-sm text-muted">
               {publishedAt && (
                 <div className="flex items-center gap-1">
@@ -127,8 +133,9 @@ export default async function AportacionPage({ params }: PageProps) {
             )}
           </header>
 
+          {/* Imagen Principal */}
           {hasImage && (
-            <div className="mb-12 overflow-hidden rounded-xl shadow-lg">
+            <div className="mx-auto mb-12 max-w-4xl overflow-hidden rounded-xl shadow-lg">
               <Image
                 src={urlFor(coverImage).width(1200).height(630).url()}
                 alt={title || "Aportación"}
@@ -141,10 +148,11 @@ export default async function AportacionPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Cuerpo del artículo centrado */}
+          {/* Cuerpo del artículo */}
+          {/* El centrado lo maneja internamente Prose con mx-auto */}
           <Prose value={body} />
 
-          <hr className="my-12 border-border" />
+          <hr className="my-12 border-border mx-auto max-w-[65ch]" />
 
           <div className="flex justify-center">
             <Link
