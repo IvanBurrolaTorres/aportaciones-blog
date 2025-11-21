@@ -94,7 +94,10 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: PortableValue }) {
   return (
-    <div className="prose mx-auto max-w-[65ch] px-4 sm:px-0 dark:prose-invert">
+    // CORRECCIÓN APLICADA AQUÍ:
+    // 1. Se agregó 'w-full' para asegurar el ancho del contenedor.
+    // 2. Se eliminó 'sm:px-0' para mantener el margen seguro en todos los dispositivos.
+    <div className="prose mx-auto w-full max-w-[65ch] px-4 dark:prose-invert">
       <PortableText value={value} components={components} />
     </div>
   );
