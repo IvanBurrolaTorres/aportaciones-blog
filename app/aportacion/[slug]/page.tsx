@@ -7,9 +7,9 @@ import type { Metadata } from "next";
 import { client } from "../../../lib/sanity.client";
 import { bySlugQuery } from "../../../lib/queries";
 import { urlFor } from "../../../lib/image";
-import { Prose } from "../../../components/Prose";
-import { BackToTop } from "../../../components/BackToTop";
-import { ReadingProgress } from "../../../components/ReadingProgress";
+import { Prose } from "../../../components/Prose"; // Asegúrate que la ruta sea correcta
+import { BackToTop } from "../../../components/BackToTop"; // Asegúrate que la ruta sea correcta
+import { ReadingProgress } from "../../../components/ReadingProgress"; // Asegúrate que la ruta sea correcta
 import { ArrowLeft, Calendar, User } from "lucide-react";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -20,11 +20,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await client.fetch(bySlugQuery, { slug });
 
-  if (!post) {
-    return {
-      title: "Post no encontrado",
-    };
-  }
+  if (!post) return { title: "Post no encontrado" };
 
   const ogImage = post.coverImage
     ? urlFor(post.coverImage).width(1200).height(630).url()
@@ -58,9 +54,7 @@ export default async function AportacionPage({ params }: PageProps) {
   if (!post) notFound();
 
   const { title, excerpt, coverImage, body, publishedAt, author } = post;
-
-  const hasImage =
-    !!coverImage && (coverImage.asset?._ref || coverImage.asset?._id);
+  const hasImage = !!coverImage && (coverImage.asset?._ref || coverImage.asset?._id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -68,12 +62,7 @@ export default async function AportacionPage({ params }: PageProps) {
     headline: title,
     image: hasImage ? urlFor(coverImage).url() : undefined,
     datePublished: publishedAt,
-    author: author?.name
-      ? {
-          "@type": "Person",
-          name: author.name,
-        }
-      : undefined,
+    author: author?.name ? { "@type": "Person", name: author.name } : undefined,
     description: excerpt,
   };
 
@@ -85,83 +74,97 @@ export default async function AportacionPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* CONTENEDOR MAESTRO UNIFICADO */}
-      {/* 1. max-w-3xl: Controla el ancho de TODO (título, imagen y texto) para que sea igual. */}
-      {/* 2. mx-auto: Centra todo el bloque en la pantalla. */}
-      {/* 3. px-5 sm:px-8: Asegura que NADA toque el borde en celular, dando un margen seguro. */}
-      <article className="mx-auto w-full max-w-3xl px-5 py-12 sm:px-8 md:py-16">
+      {/* --- CONTENEDOR PRINCIPAL --- */}
+      {/* w-full: Ancho total */}
+      {/* min-h-screen: Altura mínima */}
+      {/* bg-background: Asegura color de fondo correcto */}
+      <main className="w-full min-h-screen bg-background">
         
-        {/* Botón de regreso */}
-        <Link
-          href="/"
-          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-accent transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Volver al inicio
-        </Link>
-
-        {/* Header */}
-        <header className="mb-10 text-center">
-          <div className="mb-4 flex items-center justify-center gap-4 text-sm text-muted">
-            {publishedAt && (
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <time dateTime={publishedAt}>
-                  {new Date(publishedAt).toLocaleDateString("es-MX", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
-              </div>
-            )}
-            {author?.name && (
-              <div className="flex items-center gap-1">
-                <User className="h-4 w-4" />
-                <span>{author.name}</span>
-              </div>
-            )}
-          </div>
-          <h1 className="mb-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-            {title}
-          </h1>
-          {excerpt && (
-            <p className="mx-auto max-w-2xl text-lg text-muted">
-              {excerpt}
-            </p>
-          )}
-        </header>
-
-        {/* Imagen Principal */}
-        {hasImage && (
-          <div className="mb-12 w-full overflow-hidden rounded-xl shadow-lg">
-            <Image
-              src={urlFor(coverImage).width(1200).height(630).url()}
-              alt={title || "Aportación"}
-              width={1200}
-              height={630}
-              priority
-              className="w-full object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px"
-            />
-          </div>
-        )}
-
-        {/* Cuerpo del artículo */}
-        {/* Ahora Prose no pelea por el layout, solo llena este contenedor */}
-        <Prose value={body} />
-
-        <hr className="my-12 border-border" />
-
-        <div className="flex justify-center">
+        {/* --- ARTÍCULO CENTRADO --- */}
+        {/* max-w-3xl: Ancho máximo de lectura (aprox 768px) */}
+        {/* mx-auto: CENTRADO AUTOMÁTICO HORIZONTAL */}
+        {/* px-6: PADDING LATERAL OBLIGATORIO (Evita bordes pegados en móvil) */}
+        {/* py-12: Espaciado vertical */}
+        <article className="container mx-auto max-w-3xl px-6 py-12 md:py-20">
+          
+          {/* Botón Volver */}
           <Link
             href="/"
-            className="rounded-full bg-card px-8 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-white"
+            className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-accent transition-colors"
           >
-            Leer más artículos
+            <ArrowLeft className="h-4 w-4" />
+            Volver al inicio
           </Link>
-        </div>
-      </article>
+
+          {/* Header */}
+          <header className="flex flex-col items-center text-center mb-10">
+            <div className="mb-4 flex flex-wrap items-center justify-center gap-4 text-sm text-muted">
+              {publishedAt && (
+                <div className="flex items-center gap-1">
+                  <Calendar className="h-4 w-4" />
+                  <time dateTime={publishedAt}>
+                    {new Date(publishedAt).toLocaleDateString("es-MX", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </div>
+              )}
+              {author?.name && (
+                <div className="flex items-center gap-1">
+                  <User className="h-4 w-4" />
+                  <span>{author.name}</span>
+                </div>
+              )}
+            </div>
+            
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl mb-6 text-text">
+              {title}
+            </h1>
+            
+            {excerpt && (
+              <p className="max-w-2xl text-lg text-muted">
+                {excerpt}
+              </p>
+            )}
+          </header>
+
+          {/* Imagen */}
+          {hasImage && (
+            <div className="w-full mb-12 overflow-hidden rounded-xl shadow-lg bg-card">
+              <Image
+                src={urlFor(coverImage).width(1200).height(630).url()}
+                alt={title || "Aportación"}
+                width={1200}
+                height={630}
+                priority
+                className="w-full h-auto object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px"
+              />
+            </div>
+          )}
+
+          {/* Cuerpo del Texto (Prose) */}
+          {/* Al estar dentro del article con px-6, ya no tocará los bordes */}
+          <div className="w-full">
+            <Prose value={body} />
+          </div>
+
+          {/* Footer del post */}
+          <hr className="my-12 border-border" />
+          
+          <div className="flex justify-center">
+            <Link
+              href="/"
+              className="inline-flex h-10 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            >
+              Leer más artículos
+            </Link>
+          </div>
+
+        </article>
+      </main>
 
       <BackToTop />
     </>
