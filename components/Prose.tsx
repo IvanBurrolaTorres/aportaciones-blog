@@ -1,14 +1,14 @@
-import { PortableText, PortableTextComponents } from "@portabletext/react"
-import { urlFor } from "../lib/image"
-import Image from "next/image"
-import { cn } from "../lib/utils"
+import Image from "next/image";
+import { PortableText, PortableTextComponents } from "@portabletext/react";
+import { urlFor } from "../lib/image";
 
 const components: PortableTextComponents = {
   types: {
     image: ({ value }: any) => {
       if (!value?.asset?._ref) {
-        return null
+        return null;
       }
+
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-card">
@@ -25,7 +25,7 @@ const components: PortableTextComponents = {
             </figcaption>
           )}
         </figure>
-      )
+      );
     },
   },
   block: {
@@ -72,9 +72,7 @@ const components: PortableTextComponents = {
   },
   marks: {
     link: ({ children, value }) => {
-      const rel = !value.href.startsWith("/")
-        ? "noreferrer noopener"
-        : undefined
+      const rel = !value.href.startsWith("/") ? "noreferrer noopener" : undefined;
       return (
         <a
           href={value.href}
@@ -83,7 +81,7 @@ const components: PortableTextComponents = {
         >
           {children}
         </a>
-      )
+      );
     },
     code: ({ children }) => (
       <code className="relative rounded bg-card px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-text">
@@ -91,12 +89,18 @@ const components: PortableTextComponents = {
       </code>
     ),
   },
-}
+};
 
-export function Prose({ value }: { value: any }) {
+type ProseProps = {
+  // lo relajamos para que TS no truene en build
+  value: unknown;
+};
+
+export function Prose({ value }: ProseProps) {
   return (
-    <div className="prose mx-auto max-w-[65ch] dark:prose-invert">
-      <PortableText value={value} components={components} />
+    <div className="prose prose-lg dark:prose-invert mx-auto max-w-[65ch] px-4 md:px-0">
+      {/* forzamos el tipo para PortableText */}
+      <PortableText value={value as any} components={components} />
     </div>
-  )
+  );
 }

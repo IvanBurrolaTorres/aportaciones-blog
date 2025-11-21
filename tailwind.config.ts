@@ -1,28 +1,39 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
-  darkMode: ["class", '[data-theme="dark"]'],
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
+    "./schemas/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+      container: {
+        center: true,
+        padding: "1rem",
+        screens: {
+          "2xl": "1200px",
+        },
       },
-      colors: {
-        // Custom dark/light palette
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        neutral: {
-          900: "#171717",
-          800: "#262626",
-          // ...
-        }
+      typography: {
+        DEFAULT: {
+          css: {
+            "img, video, figure": {
+              marginLeft: "auto",
+              marginRight: "auto",
+              borderRadius: "0.75rem",
+            },
+            pre: {
+              borderRadius: "0.75rem",
+            },
+          },
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [typography],
 };
+
 export default config;
