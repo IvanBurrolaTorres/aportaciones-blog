@@ -85,83 +85,81 @@ export default async function AportacionPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* CORRECCIÓN: Estructura simplificada para garantizar centrado */}
-      <article className="min-h-screen w-full py-10 md:py-16">
-        {/* Contenedor principal centrado */}
-        <div className="container mx-auto w-full px-4">
-          
-          {/* Botón Volver */}
-          <div className="mx-auto max-w-[65ch]">
-            <Link
-              href="/"
-              className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-accent transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Volver al inicio
-            </Link>
-          </div>
+      {/* CONTENEDOR MAESTRO UNIFICADO */}
+      {/* 1. max-w-3xl: Controla el ancho de TODO (título, imagen y texto) para que sea igual. */}
+      {/* 2. mx-auto: Centra todo el bloque en la pantalla. */}
+      {/* 3. px-5 sm:px-8: Asegura que NADA toque el borde en celular, dando un margen seguro. */}
+      <article className="mx-auto w-full max-w-3xl px-5 py-12 sm:px-8 md:py-16">
+        
+        {/* Botón de regreso */}
+        <Link
+          href="/"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-accent transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Volver al inicio
+        </Link>
 
-          {/* Header del Artículo */}
-          <header className="mx-auto mb-10 max-w-3xl text-center">
-            <div className="mb-4 flex items-center justify-center gap-4 text-sm text-muted">
-              {publishedAt && (
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <time dateTime={publishedAt}>
-                    {new Date(publishedAt).toLocaleDateString("es-MX", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
-                </div>
-              )}
-              {author?.name && (
-                <div className="flex items-center gap-1">
-                  <User className="h-4 w-4" />
-                  <span>{author.name}</span>
-                </div>
-              )}
-            </div>
-            <h1 className="mb-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              {title}
-            </h1>
-            {excerpt && (
-              <p className="mx-auto max-w-2xl text-lg text-muted">
-                {excerpt}
-              </p>
+        {/* Header */}
+        <header className="mb-10 text-center">
+          <div className="mb-4 flex items-center justify-center gap-4 text-sm text-muted">
+            {publishedAt && (
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                <time dateTime={publishedAt}>
+                  {new Date(publishedAt).toLocaleDateString("es-MX", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+              </div>
             )}
-          </header>
-
-          {/* Imagen Principal */}
-          {hasImage && (
-            <div className="mx-auto mb-12 max-w-4xl overflow-hidden rounded-xl shadow-lg">
-              <Image
-                src={urlFor(coverImage).width(1200).height(630).url()}
-                alt={title || "Aportación"}
-                width={1200}
-                height={630}
-                priority
-                className="w-full object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px"
-              />
-            </div>
-          )}
-
-          {/* Cuerpo del artículo */}
-          {/* El centrado lo maneja internamente Prose con mx-auto */}
-          <Prose value={body} />
-
-          <hr className="my-12 border-border mx-auto max-w-[65ch]" />
-
-          <div className="flex justify-center">
-            <Link
-              href="/"
-              className="rounded-full bg-card px-8 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-white"
-            >
-              Leer más artículos
-            </Link>
+            {author?.name && (
+              <div className="flex items-center gap-1">
+                <User className="h-4 w-4" />
+                <span>{author.name}</span>
+              </div>
+            )}
           </div>
+          <h1 className="mb-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+            {title}
+          </h1>
+          {excerpt && (
+            <p className="mx-auto max-w-2xl text-lg text-muted">
+              {excerpt}
+            </p>
+          )}
+        </header>
+
+        {/* Imagen Principal */}
+        {hasImage && (
+          <div className="mb-12 w-full overflow-hidden rounded-xl shadow-lg">
+            <Image
+              src={urlFor(coverImage).width(1200).height(630).url()}
+              alt={title || "Aportación"}
+              width={1200}
+              height={630}
+              priority
+              className="w-full object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px"
+            />
+          </div>
+        )}
+
+        {/* Cuerpo del artículo */}
+        {/* Ahora Prose no pelea por el layout, solo llena este contenedor */}
+        <Prose value={body} />
+
+        <hr className="my-12 border-border" />
+
+        <div className="flex justify-center">
+          <Link
+            href="/"
+            className="rounded-full bg-card px-8 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-white"
+          >
+            Leer más artículos
+          </Link>
         </div>
       </article>
 
