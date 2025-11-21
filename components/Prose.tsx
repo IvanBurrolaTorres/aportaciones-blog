@@ -94,7 +94,17 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: any }) {
   return (
-    <div className="prose prose-lg dark:prose-invert mx-auto max-w-[65ch] px-4 sm:px-0">
+    <div
+      className="
+        prose prose-lg dark:prose-invert
+        mx-auto max-w-[65ch]
+        px-4 sm:px-0
+        prose-headings:text-neutral-900
+        prose-p:text-neutral-900
+        prose-li:text-neutral-900
+        prose-strong:text-neutral-900
+      "
+    >
       <PortableText value={value as any} components={components} />
     </div>
   );
