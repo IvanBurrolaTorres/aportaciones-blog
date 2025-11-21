@@ -1,15 +1,13 @@
-import type { PortableTextComponents, PortableTextProps } from "@portabletext/react";
-import { PortableText } from "@portabletext/react";
-import Image from "next/image";
+import { PortableText, PortableTextComponents } from "@portabletext/react";
 import { urlFor } from "../lib/image";
+import Image from "next/image";
 
 const components: PortableTextComponents = {
   types: {
-    image: ({ value }: { value: any }) => {
-      if (!value?.asset?._ref && !value?.asset?._id) {
+    image: ({ value }: any) => {
+      if (!value?.asset?._ref) {
         return null;
       }
-
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-card">
@@ -31,22 +29,22 @@ const components: PortableTextComponents = {
   },
   block: {
     h1: ({ children }) => (
-      <h1 className="mt-10 mb-6 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mt-10 mb-6">
         {children}
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="mt-10 mb-4 scroll-m-20 border-b border-border pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+      <h2 className="scroll-m-20 border-b border-border pb-2 text-3xl font-semibold tracking-tight first:mt-0 mt-10 mb-4">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="mt-8 mb-4 scroll-m-20 text-2xl font-semibold tracking-tight">
+      <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mt-8 mb-4">
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="mt-6 mb-3 scroll-m-20 text-xl font-semibold tracking-tight">
+      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight mt-6 mb-3">
         {children}
       </h4>
     ),
@@ -73,11 +71,12 @@ const components: PortableTextComponents = {
   },
   marks: {
     link: ({ children, value }) => {
-      const rel = !value?.href?.startsWith("/") ? "noreferrer noopener" : undefined;
-
+      const rel = !value.href.startsWith("/")
+        ? "noreferrer noopener"
+        : undefined;
       return (
         <a
-          href={value?.href}
+          href={value.href}
           rel={rel}
           className="font-medium text-accent underline underline-offset-4 hover:text-accent/80"
         >
@@ -93,14 +92,10 @@ const components: PortableTextComponents = {
   },
 };
 
-type ProseProps = {
-  value: PortableTextProps["value"];
-};
-
-export function Prose({ value }: ProseProps) {
+export function Prose({ value }: { value: any }) {
   return (
-    <div className="prose prose-lg dark:prose-invert mx-auto w-full px-4 sm:px-0">
-      <PortableText value={value} components={components} />
+    <div className="prose prose-lg dark:prose-invert mx-auto max-w-[65ch] px-4 sm:px-0">
+      <PortableText value={value as any} components={components} />
     </div>
   );
 }
