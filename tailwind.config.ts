@@ -17,9 +17,27 @@ const config: Config = {
           "2xl": "1200px",
         },
       },
-      typography: {
+      typography: (theme) => ({
         DEFAULT: {
           css: {
+            color: theme("colors.neutral.900"),
+            "h1, h2, h3, h4": {
+              color: theme("colors.neutral.950"),
+            },
+            strong: {
+              color: theme("colors.neutral.950"),
+            },
+            a: {
+              color: theme("colors.blue.600"),
+              textDecoration: "underline",
+              fontWeight: "500",
+              "&:hover": {
+                color: theme("colors.blue.700"),
+              },
+            },
+            code: {
+              color: theme("colors.neutral.950"),
+            },
             "img, video, figure": {
               marginLeft: "auto",
               marginRight: "auto",
@@ -30,7 +48,27 @@ const config: Config = {
             },
           },
         },
-      },
+        invert: {
+          css: {
+            color: theme("colors.neutral.50"),
+            "h1, h2, h3, h4": {
+              color: theme("colors.white"),
+            },
+            strong: {
+              color: theme("colors.white"),
+            },
+            a: {
+              color: theme("colors.blue.400"),
+              "&:hover": {
+                color: theme("colors.blue.300"),
+              },
+            },
+            code: {
+              color: theme("colors.white"),
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [typography],
