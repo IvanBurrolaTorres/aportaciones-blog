@@ -1,13 +1,13 @@
-import { PortableText, PortableTextComponents } from "@portabletext/react"
-import { urlFor } from "../lib/image"
-import Image from "next/image"
-import { cn } from "../lib/utils"
+import { PortableText, PortableTextComponents } from "@portabletext/react";
+import { urlFor } from "../lib/image";
+import Image from "next/image";
+import { cn } from "../lib/utils";
 
 const components: PortableTextComponents = {
   types: {
     image: ({ value }: any) => {
       if (!value?.asset?._ref) {
-        return null
+        return null;
       }
       return (
         <figure className="my-8">
@@ -25,7 +25,7 @@ const components: PortableTextComponents = {
             </figcaption>
           )}
         </figure>
-      )
+      );
     },
   },
   block: {
@@ -72,9 +72,7 @@ const components: PortableTextComponents = {
   },
   marks: {
     link: ({ children, value }) => {
-      const rel = !value.href.startsWith("/")
-        ? "noreferrer noopener"
-        : undefined
+      const rel = !value.href.startsWith("/") ? "noreferrer noopener" : undefined;
       return (
         <a
           href={value.href}
@@ -83,7 +81,7 @@ const components: PortableTextComponents = {
         >
           {children}
         </a>
-      )
+      );
     },
     code: ({ children }) => (
       <code className="relative rounded bg-card px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-text">
@@ -91,12 +89,12 @@ const components: PortableTextComponents = {
       </code>
     ),
   },
-}
+};
 
 export function Prose({ value }: { value: any }) {
   return (
-    <div className="prose mx-auto max-w-[65ch] dark:prose-invert">
+    <div className="prose prose-neutral dark:prose-invert mx-auto max-w-3xl px-4 md:px-6 leading-relaxed">
       <PortableText value={value} components={components} />
     </div>
-  )
+  );
 }
