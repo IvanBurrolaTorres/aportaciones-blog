@@ -85,7 +85,7 @@ const components: PortableTextComponents = {
       );
     },
     code: ({ children }) => (
-      <code className="relative rounded bg-card px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-text">
+      <code className="relative rounded bg-card px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
         {children}
       </code>
     ),
@@ -94,20 +94,7 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: any }) {
   return (
-    <div
-      className="
-        prose prose-lg mx-auto max-w-[65ch] px-4 sm:px-0
-        prose-headings:text-neutral-900
-        prose-p:text-neutral-900
-        prose-li:text-neutral-900
-        prose-strong:text-neutral-900
-        dark:prose-invert
-        dark:prose-headings:text-neutral-50
-        dark:prose-p:text-neutral-100
-        dark:prose-li:text-neutral-100
-        dark:prose-strong:text-neutral-50
-      "
-    >
+    <div className="mx-auto w-full max-w-[65ch] px-4 sm:px-0 text-neutral-900 dark:text-neutral-100">
       <PortableText value={value as any} components={components} />
     </div>
   );
