@@ -17,7 +17,7 @@ const config: Config = {
           "2xl": "1200px",
         },
       },
-      typography: (theme) => ({
+      typography: (theme: any) => ({
         DEFAULT: {
           css: {
             color: theme("colors.neutral.900"),
