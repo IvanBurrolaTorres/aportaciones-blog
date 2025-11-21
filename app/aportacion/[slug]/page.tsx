@@ -80,15 +80,14 @@ export default async function AportacionPage({ params }: PageProps) {
   return (
     <>
       <ReadingProgress />
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Contenedor centrado + gutters */}
-      <article className="container mx-auto px-4 md:px-6 py-10 md:py-16">
-        <div className="mx-auto max-w-3xl">
+      {/* Contenedor del artículo con padding lateral en móvil */}
+      <article className="w-full py-10 md:py-16">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <Link
             href="/"
             className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-accent transition-colors"
@@ -122,26 +121,27 @@ export default async function AportacionPage({ params }: PageProps) {
               {title}
             </h1>
             {excerpt && (
-              <p className="mx-auto max-w-2xl text-lg text-muted">{excerpt}</p>
+              <p className="mx-auto max-w-2xl text-lg text-muted">
+                {excerpt}
+              </p>
             )}
           </header>
 
-          {/* Hero centrada y alineada al eje del texto */}
           {hasImage && (
-            <div className="mb-12">
+            <div className="mb-12 overflow-hidden rounded-xl shadow-lg">
               <Image
                 src={urlFor(coverImage).width(1200).height(630).url()}
                 alt={title || "Aportación"}
                 width={1200}
                 height={630}
                 priority
-                className="mx-auto w-full h-auto rounded-2xl object-cover"
+                className="w-full object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px"
               />
             </div>
           )}
 
-          {/* Cuerpo del post centrado (usa Prose.tsx que ya ajustamos) */}
+          {/* Cuerpo del artículo centrado */}
           <Prose value={body} />
 
           <hr className="my-12 border-border" />
