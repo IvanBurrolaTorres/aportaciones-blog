@@ -94,9 +94,11 @@ const components: PortableTextComponents = {
 
 export function Prose({ value }: { value: PortableValue }) {
   return (
-    // CORRECCIÓN APLICADA AQUÍ:
-    // 1. Se agregó 'w-full' para asegurar el ancho del contenedor.
-    // 2. Se eliminó 'sm:px-0' para mantener el margen seguro en todos los dispositivos.
+    // CORRECCIÓN CRÍTICA: 
+    // 1. 'w-full' fuerza a usar todo el ancho disponible.
+    // 2. 'mx-auto' activa el centrado.
+    // 3. 'px-4' asegura margen en móviles. 
+    // 4. SE ELIMINÓ 'sm:px-0' que era lo que rompía el margen en celulares grandes/tablets.
     <div className="prose mx-auto w-full max-w-[65ch] px-4 dark:prose-invert">
       <PortableText value={value} components={components} />
     </div>
