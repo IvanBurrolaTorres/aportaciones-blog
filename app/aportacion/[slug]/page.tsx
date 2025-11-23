@@ -4,12 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { PortableText } from "@portabletext/react";
 import { client } from "../../../lib/sanity.client";
 import { bySlugQuery } from "../../../lib/queries";
 import { urlFor } from "../../../lib/image";
-import { Prose } from "../../../components/Prose"; // Asegúrate que la ruta sea correcta
-import { BackToTop } from "../../../components/BackToTop"; // Asegúrate que la ruta sea correcta
-import { ReadingProgress } from "../../../components/ReadingProgress"; // Asegúrate que la ruta sea correcta
+import { Prose } from "../../../components/Prose";
+import { BackToTop } from "../../../components/BackToTop";
+import { ReadingProgress } from "../../../components/ReadingProgress";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -74,33 +75,24 @@ export default async function AportacionPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* --- CONTENEDOR PRINCIPAL --- */}
-      {/* w-full: Ancho total */}
-      {/* min-h-screen: Altura mínima */}
-      {/* bg-background: Asegura color de fondo correcto */}
-      <main className="w-full min-h-screen bg-background">
-        
-        {/* --- ARTÍCULO CENTRADO --- */}
-        {/* max-w-3xl: Ancho máximo de lectura (aprox 768px) */}
-        {/* mx-auto: CENTRADO AUTOMÁTICO HORIZONTAL */}
-        {/* px-6: PADDING LATERAL OBLIGATORIO (Evita bordes pegados en móvil) */}
-        {/* py-12: Espaciado vertical */}
-        <article className="container mx-auto max-w-3xl px-6 py-12 md:py-20">
-          
-          {/* Botón Volver */}
-          <Link
-            href="/"
-            className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-accent transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Volver al inicio
-          </Link>
+      <main className="w-full min-h-screen bg-background pb-20">
+        {/* Hero Header */}
+        <header className="relative w-full py-20 md:py-32 border-b border-white/10 overflow-hidden">
+          <div className="absolute inset-0 -z-10 bg-muted/20" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-          {/* Header */}
-          <header className="flex flex-col items-center text-center mb-10">
-            <div className="mb-4 flex flex-wrap items-center justify-center gap-4 text-sm text-muted">
+          <div className="container mx-auto px-4 md:px-6 text-center max-w-4xl">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-8"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Volver al inicio
+            </Link>
+
+            <div className="mb-6 flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
               {publishedAt && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" />
                   <time dateTime={publishedAt}>
                     {new Date(publishedAt).toLocaleDateString("es-MX", {
@@ -112,52 +104,52 @@ export default async function AportacionPage({ params }: PageProps) {
                 </div>
               )}
               {author?.name && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <User className="h-4 w-4" />
                   <span>{author.name}</span>
                 </div>
               )}
             </div>
-            
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl mb-6 text-text">
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-foreground mb-6 leading-tight">
               {title}
             </h1>
-            
+
             {excerpt && (
-              <p className="max-w-2xl text-lg text-muted">
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
                 {excerpt}
               </p>
             )}
-          </header>
+          </div>
+        </header>
 
+        <article className="container mx-auto max-w-3xl px-4 md:px-6 -mt-12 relative z-10">
           {/* Imagen */}
           {hasImage && (
-            <div className="w-full mb-12 overflow-hidden rounded-xl shadow-lg bg-card">
+            <div className="w-full mb-12 overflow-hidden rounded-2xl shadow-2xl border border-white/10 bg-card aspect-video relative">
               <Image
                 src={urlFor(coverImage).width(1200).height(630).url()}
                 alt={title || "Aportación"}
-                width={1200}
-                height={630}
+                fill
                 priority
-                className="w-full h-auto object-cover"
+                className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px"
               />
             </div>
           )}
 
           {/* Cuerpo del Texto (Prose) */}
-          {/* Al estar dentro del article con px-6, ya no tocará los bordes */}
-          <div className="w-full">
+          <div className="bg-background/50 backdrop-blur-sm rounded-2xl p-0 md:p-0">
             <Prose value={body} />
           </div>
 
           {/* Footer del post */}
           <hr className="my-12 border-border" />
-          
+
           <div className="flex justify-center">
             <Link
               href="/"
-              className="inline-flex h-10 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:scale-105 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
               Leer más artículos
             </Link>
