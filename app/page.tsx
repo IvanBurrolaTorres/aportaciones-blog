@@ -1,149 +1,111 @@
-import { client } from "../lib/sanity.client";
-import { listQuery, PAGE_SIZE } from "../lib/queries";
-import { BlogCard } from "../components/BlogCard";
 import Link from "next/link";
+import { client } from "../lib/sanity.client";
+import { listQuery } from "../lib/queries";
+import { BlogCard } from "../components/BlogCard";
+import { TextReveal } from "../components/TextReveal";
 
-export const revalidate = 300;
+// ...
 
-type SP = Record<string, string | string[]> | URLSearchParams | undefined;
+{/* Text Reveal Section */ }
+<TextReveal text="La curiosidad es el motor que impulsa cada descubrimiento." />
 
-function getPage(sp: SP): number {
-  if (!sp) return 1;
-  if (typeof (sp as any).get === "function") {
-    const v = (sp as URLSearchParams).get("page") || "1";
-    const n = Number(v);
-    return Number.isFinite(n) && n > 0 ? n : 1;
-  }
-  const raw = (sp as Record<string, any>).page ?? "1";
-  const v = Array.isArray(raw) ? raw[0] : raw;
-  const n = Number(v ?? "1");
-  return Number.isFinite(n) && n > 0 ? n : 1;
-}
+{/* Posts Grid */ }
+import { ArrowRight } from "lucide-react";
 
-export default async function Home(props: { searchParams?: Promise<SP> | SP }) {
-  const maybePromise = props?.searchParams as any;
-  const sp: SP =
-    maybePromise && typeof maybePromise.then === "function"
-      ? await maybePromise
-      : (props.searchParams as SP);
+export const revalidate = 60;
 
-  const page = getPage(sp);
-  const from = (page - 1) * PAGE_SIZE;
-  const to = from + PAGE_SIZE;
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = parseInt(pageParam || "1");
+  const pageSize = 6;
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize;
 
-  let posts: any[] = [];
-  try {
-    posts = await client.fetch(listQuery, { from, to });
-  } catch (e) {
-    console.error(e);
-    posts = [];
-  }
+  const posts = await client.fetch(listQuery, { from, to });
 
   return (
-    <div className="min-h-screen pb-20">
-      {/* Hero Section */}
-      <section className="relative w-full border-b border-white/10 bg-background py-32 md:py-48 overflow-hidden">
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="max-w-4xl space-y-8">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-foreground animate-fade-in">
-              MI CAMINO.
+    <div className="min-h-screen">
+      {/* Asymmetrical Hero Section */}
+      <section className="relative w-full min-h-[80vh] flex items-center overflow-hidden">
+        <div className="container mx-auto px-4 md:px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+          {/* Left Content - Typography Heavy */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium tracking-wider uppercase">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              Blog Personal
+            </div>
+
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold tracking-tighter leading-[0.9]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-primary animate-text-gradient">
+                Mi <br /> Camino.
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl animate-fade-in [animation-delay:200ms]">
-              Iván Burrola Torres A01562825.
+
+            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-xl font-light">
+              Un espacio donde convergen mis pensamientos, aprendizajes y la búsqueda constante de crecimiento.
             </p>
+
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Link href="#posts" className="inline-flex h-14 items-center justify-center rounded-full bg-foreground px-8 text-base font-medium text-background transition-all hover:bg-foreground/90 hover:scale-105 active:scale-95">
+                Explorar Aportaciones
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Content - Abstract/Visual */}
+          <div className="lg:col-span-5 relative hidden lg:block h-[600px]">
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-purple-500/30 rounded-full blur-3xl animate-pulse" />
+            <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl bg-muted/10 backdrop-blur-sm flex items-center justify-center">
+              <div className="text-center flex items-center justify-center h-full w-full">
+                <span className="text-9xl md:text-[10rem] leading-normal font-serif italic opacity-20 select-none p-4">IB</span>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Background Pattern */}
-        <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-
-        {/* Gradient Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/20 blur-[120px] rounded-full pointer-events-none opacity-50" />
       </section>
 
-      {/* Posts Grid */}
-      <section className="container mx-auto px-4 md:px-6 py-24">
-        {posts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="rounded-full bg-muted p-6 mb-6">
-              <svg
-                className="w-10 h-10 text-muted-foreground"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-foreground">
-              No hay artículos aún
-            </h3>
-            <p className="text-muted-foreground max-w-sm mt-3">
-              Estamos trabajando en nuevo contenido. Vuelve pronto para leer las
-              últimas novedades.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(400px,auto)]">
-            {posts.map((post: any, index: number) => (
-              <BlogCard
-                key={post.slug}
-                post={post}
-                index={index}
-                isHero={index === 0 && page === 1}
-              />
-            ))}
-          </div>
-        )}
+      {/* Text Reveal Section */}
+      <TextReveal text="La curiosidad es el motor que impulsa cada descubrimiento." />
 
-        {/* Pagination Controls */}
+      {/* Posts Grid */}
+      <section id="posts" className="container mx-auto px-4 md:px-6 py-24">
+        <div className="flex items-end justify-between mb-16">
+          <h2 className="text-4xl md:text-6xl font-serif font-bold tracking-tight">Últimas <br /> Publicaciones</h2>
+          <p className="hidden md:block text-muted-foreground text-lg max-w-xs text-right">
+            Historias seleccionadas para inspirar y reflexionar.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[minmax(400px,auto)]">
+          {posts.map((post: any, index: number) => (
+            <BlogCard
+              key={post.slug}
+              post={post}
+              index={index}
+              isHero={index === 0 && page === 1}
+            />
+          ))}
+        </div>
+
+        {/* Pagination */}
         <div className="mt-24 flex justify-center gap-4">
           {page > 1 && (
-            <Link
-              href={`/?page=${page - 1}`}
-              className="group flex items-center gap-2 rounded-full border border-border bg-background px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-primary/50 hover:bg-muted"
-            >
-              <svg
-                className="h-4 w-4 transition-transform group-hover:-translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+            <Link href={`/?page=${page - 1}`} className="inline-flex h-12 items-center justify-center rounded-full border border-input bg-background px-8 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
               Anterior
             </Link>
           )}
-
-          {posts.length >= PAGE_SIZE && (
-            <Link
-              href={`/?page=${page + 1}`}
-              className="group flex items-center gap-2 rounded-full border border-border bg-background px-6 py-3 text-sm font-medium text-foreground transition-all hover:border-primary/50 hover:bg-muted"
-            >
+          {posts.length === pageSize && (
+            <Link href={`/?page=${page + 1}`} className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
               Siguiente
-              <svg
-                className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
             </Link>
           )}
         </div>

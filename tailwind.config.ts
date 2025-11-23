@@ -4,8 +4,8 @@ import typography from "@tailwindcss/typography";
 const config: Config = {
   // Importante: Asegúrate de que darkMode esté configurado para usar clases o data-attributes
   // Si usas next-themes con data-theme='dark', esto ayuda:
-  darkMode: ["class", '[data-theme="dark"]'], 
-  
+  darkMode: ["class", '[data-theme="dark"]'],
+
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -20,6 +20,10 @@ const config: Config = {
         screens: {
           "2xl": "1200px",
         },
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)", "sans-serif"],
+        serif: ["var(--font-serif)", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",

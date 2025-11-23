@@ -1,14 +1,19 @@
 import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import { Shell } from '../components/Shell'
 import { ThemeProvider } from '../components/ThemeProvider'
 import './globals.css'
 import { cn } from '../lib/utils'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
+  variable: "--font-sans",
+})
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+})
 
 export const metadata: Metadata = {
   title: {
@@ -27,7 +32,8 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body className={cn(
         "min-h-screen bg-background font-sans antialiased",
-        geistSans.variable
+        inter.variable,
+        playfair.variable
       )}>
         <ThemeProvider
           attribute="data-theme"

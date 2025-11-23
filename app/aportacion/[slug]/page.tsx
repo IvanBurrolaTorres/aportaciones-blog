@@ -77,70 +77,73 @@ export default async function AportacionPage({ params }: PageProps) {
 
       <main className="w-full min-h-screen bg-background pb-20">
         {/* Hero Header */}
-        <header className="relative w-full py-20 md:py-32 border-b border-white/10 overflow-hidden">
-          <div className="absolute inset-0 -z-10 bg-muted/20" />
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-          <div className="container mx-auto px-4 md:px-6 text-center max-w-4xl">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-8"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Volver al inicio
-            </Link>
+        <article className="container mx-auto max-w-4xl px-4 md:px-6 relative z-10 pb-24">
+          {/* Editorial Header */}
+          <header className="flex flex-col items-center text-center py-16 md:py-24 space-y-8">
+            <div className="space-y-4 max-w-3xl">
+              <div className="flex items-center justify-center gap-2 text-sm font-medium tracking-wider uppercase text-primary">
+                {post.categories && post.categories.length > 0 && (
+                  <span>{post.categories[0].title}</span>
+                )}
+                {post.publishedAt && (
+                  <>
+                    <span className="text-muted-foreground">•</span>
+                    <time dateTime={post.publishedAt} className="text-muted-foreground">
+                      {new Date(post.publishedAt).toLocaleDateString("es-MX", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </time>
+                  </>
+                )}
+              </div>
 
-            <div className="mb-6 flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
-              {publishedAt && (
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="h-4 w-4" />
-                  <time dateTime={publishedAt}>
-                    {new Date(publishedAt).toLocaleDateString("es-MX", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
-                </div>
-              )}
-              {author?.name && (
-                <div className="flex items-center gap-1.5">
-                  <User className="h-4 w-4" />
-                  <span>{author.name}</span>
-                </div>
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-foreground leading-[1.1]">
+                {post.title}
+              </h1>
+
+              {post.excerpt && (
+                <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                  {post.excerpt}
+                </p>
               )}
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-foreground mb-6 leading-tight">
-              {title}
-            </h1>
-
-            {excerpt && (
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                {excerpt}
-              </p>
+            {post.author && (
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-muted border border-border overflow-hidden">
+                  {/* Placeholder for author image if available */}
+                  <div className="w-full h-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    {post.author.name.charAt(0)}
+                  </div>
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-foreground">{post.author.name}</p>
+                  <p className="text-xs text-muted-foreground">Autor</p>
+                </div>
+              </div>
             )}
-          </div>
-        </header>
+          </header>
 
-        <article className="container mx-auto max-w-3xl px-4 md:px-6 -mt-12 relative z-10">
-          {/* Imagen */}
-          {hasImage && (
-            <div className="w-full mb-12 overflow-hidden rounded-2xl shadow-2xl border border-white/10 bg-card aspect-video relative">
+          {/* Hero Image with Grain */}
+          {post.coverImage && (
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl mb-16 group">
+              <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay z-10 pointer-events-none" />
               <Image
-                src={urlFor(coverImage).width(1200).height(630).url()}
-                alt={title || "Aportación"}
+                src={urlFor(post.coverImage).width(1200).height(675).url()}
+                alt={post.title}
                 fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
                 priority
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px"
               />
             </div>
           )}
 
           {/* Cuerpo del Texto (Prose) */}
-          <div className="bg-background/50 backdrop-blur-sm rounded-2xl p-0 md:p-0">
-            <Prose value={body} />
+          <div className="prose-container max-w-none">
+            <Prose value={body} className="mx-auto" />
           </div>
 
           {/* Footer del post */}
